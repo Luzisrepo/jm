@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JM Solutions - Staff Application</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0080ff;
+            --primary-dark: #0066cc;
+            --secondary: #00bfff;
+            --dark: #0a0e17;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --success: #28a745;
+            --danger: #dc3545;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0a0e17 0%, #1a1f2e 100%);
+            color: var(--light);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--light);
+        }
+
+        .subtitle {
+            color: var(--gray);
+            margin-bottom: 20px;
+        }
+
+        .application-container {
+            background: rgba(30, 35, 50, 0.8);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .application-form {
+            display: grid;
+            gap: 25px;
+        }
+
+        .form-section {
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--secondary);
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: var(--light);
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 136, 255, 0.3);
+        }
+
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-hint {
+            font-size: 0.85rem;
+            color: var(--gray);
+            margin-top: 5px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 136, 255, 0.4);
+        }
+
+        .submit-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .alert-success {
+            background-color: rgba(40, 167, 69, 0.2);
+            border: 1px solid rgba(40, 167, 69, 0.5);
+            color: #d4edda;
+        }
+
+        .alert-error {
+            background-color: rgba(220, 53, 69, 0.2);
+            border: 1px solid rgba(220, 53, 69, 0.5);
+            color: #f8d7da;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .required::after {
+            content: " *";
+            color: var(--danger);
+        }
+
+        @media (max-width: 768px) {
+            .application-container {
+                padding: 20px;
+            }
+            
+            .page-title {
+                font-size: 1.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">JM SOLUTIONS</div>
+            <h1 class="page-title">Staff Application</h1>
+            <p class="subtitle">Join our team and help us provide exceptional service to our community</p>
+        </header>
+
+        <div class="alert alert-success" id="successAlert">
+            <i class="fas fa-check-circle"></i> Your application has been submitted successfully!
+        </div>
+
+        <div class="alert alert-error" id="errorAlert">
+            <i class="fas fa-exclamation-circle"></i> <span id="errorMessage">There was an error submitting your application.</span>
+        </div>
+
+        <div class="application-container">
+            <form class="application-form" id="applicationForm">
+                <div class="form-section">
+                    <h2 class="section-title">Personal Information</h2>
+                    
+                    <div class="form-group">
+                        <label for="fullName" class="required">Full Name</label>
+                        <input type="text" id="fullName" name="fullName" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email" class="required">Email Address</label>
+                        <input type="email" id="email" name="email" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="discordTag" class="required">Discord Tag (e.g., Username#1234)</label>
+                        <input type="text" id="discordTag" name="discordTag" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h2 class="section-title">Application Questions</h2>
+                    
+                    <div class="form-group">
+                        <label for="q1" class="required">Why do you want to become a staff member at JM Solutions?</label>
+                        <textarea id="q1" name="q1" class="form-control" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="q2" class="required">What experience do you have with moderating communities?</label>
+                        <textarea id="q2" name="q2" class="form-control" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="q3" class="required">How many hours per week can you dedicate to staff duties?</label>
+                        <input type="text" id="q3" name="q3" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="q4" class="required">How would you handle a user violating our terms of service?</label>
+                        <textarea id="q4" name="q4" class="form-control" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="q5" class="required">What time zone are you in, and what are your most active hours?</label>
+                        <input type="text" id="q5" name="q5" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="q6" class="required">Describe a situation where you had to resolve a conflict between users.</label>
+                        <textarea id="q6" name="q6" class="form-control" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="q7" class="required">What skills do you possess that would make you a valuable staff member?</label>
+                        <textarea id="q7" name="q7" class="form-control" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="q8" class="required">How would you handle a situation where you need to enforce a rule you don't personally agree with?</label>
+                        <textarea id="q8" name="q8" class="form-control" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="q9">Any additional comments or questions for us?</label>
+                        <textarea id="q9" name="q9" class="form-control"></textarea>
+                    </div>
+                </div>
+
+                <div class="submit-container">
+                    <button type="submit" class="btn" id="submitBtn">
+                        <i class="fas fa-paper-plane"></i> Submit Application
+                    </button>
+                    <p class="form-hint">We'll review your application and contact you via Discord</p>
+                </div>
+            </form>
+        </div>
+
+        <footer>
+            <p>© 2024 JM Solutions. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('applicationForm');
+            const successAlert = document.getElementById('successAlert');
+            const errorAlert = document.getElementById('errorAlert');
+            const errorMessage = document.getElementById('errorMessage');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            // Replace with your actual Discord webhook URL
+            const webhookURL = 'https://discord.com/api/webhooks/1407082358372433932/5PMNct5-2wHoXcwOW9DYgsdfmFZSHAVipvJ7-ZiZkHYYu3B1nP_ftdm9NpoI809FbyLs';
+            
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                // Show loading state
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+                submitBtn.disabled = true;
+                
+                // Hide any previous alerts
+                successAlert.style.display = 'none';
+                errorAlert.style.display = 'none';
+                
+                // Form validation
+                const requiredFields = form.querySelectorAll('[required]');
+                let valid = true;
+                
+                requiredFields.forEach(field => {
+                    if (!field.value.trim()) {
+                        valid = false;
+                        field.style.borderColor = 'var(--danger)';
+                    } else {
+                        field.style.borderColor = '';
+                    }
+                });
+                
+                if (!valid) {
+                    showError('Please fill in all required fields');
+                    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Application';
+                    submitBtn.disabled = false;
+                    return;
+                }
+                
+                // Collect form data
+                const formData = {
+                    fullName: document.getElementById('fullName').value,
+                    email: document.getElementById('email').value,
+                    discordTag: document.getElementById('discordTag').value,
+                    q1: document.getElementById('q1').value,
+                    q2: document.getElementById('q2').value,
+                    q3: document.getElementById('q3').value,
+                    q4: document.getElementById('q4').value,
+                    q5: document.getElementById('q5').value,
+                    q6: document.getElementById('q6').value,
+                    q7: document.getElementById('q7').value,
+                    q8: document.getElementById('q8').value,
+                    q9: document.getElementById('q9').value,
+                    timestamp: new Date().toISOString()
+                };
+                
+                try {
+                    // Send to Discord webhook
+                    const response = await sendToDiscord(formData);
+                    
+                    if (response.ok) {
+                        // Show success message
+                        showSuccess();
+                        form.reset();
+                    } else {
+                        showError('Failed to submit application. Please try again later.');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    showError('An error occurred. Please check your connection and try again.');
+                } finally {
+                    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Application';
+                    submitBtn.disabled = false;
+                }
+            });
+            
+            async function sendToDiscord(data) {
+                // Format the message for Discord
+                const discordMessage = {
+                    username: 'JM Solutions Staff Applications',
+                    embeds: [{
+                        title: 'New Staff Application',
+                        color: 0x0080ff,
+                        fields: [
+                            { name: 'Full Name', value: data.fullName, inline: true },
+                            { name: 'Email', value: data.email, inline: true },
+                            { name: 'Discord Tag', value: data.discordTag, inline: true },
+                            { name: 'Why become staff?', value: data.q1.substring(0, 1000) + (data.q1.length > 1000 ? '...' : '') },
+                            { name: 'Moderation experience', value: data.q2.substring(0, 1000) + (data.q2.length > 1000 ? '...' : '') },
+                            { name: 'Hours per week', value: data.q3 },
+                            { name: 'Handling violations', value: data.q4.substring(0, 1000) + (data.q4.length > 1000 ? '...' : '') },
+                            { name: 'Time zone & active hours', value: data.q5 },
+                            { name: 'Conflict resolution', value: data.q6.substring(0, 1000) + (data.q6.length > 1000 ? '...' : '') },
+                            { name: 'Skills', value: data.q7.substring(0, 1000) + (data.q7.length > 1000 ? '...' : '') },
+                            { name: 'Enforcing rules', value: data.q8.substring(0, 1000) + (data.q8.length > 1000 ? '...' : '') },
+                            { name: 'Additional comments', value: data.q9 || 'None' }
+                        ],
+                        timestamp: data.timestamp,
+                        footer: { text: 'JM Solutions Staff Application' }
+                    }]
+                };
+                
+                return fetch(webhookURL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(discordMessage),
+                });
+            }
+            
+            function showSuccess() {
+                successAlert.style.display = 'block';
+                // Scroll to the top to show the success message
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+            
+            function showError(message) {
+                errorMessage.textContent = message;
+                errorAlert.style.display = 'block';
+                // Scroll to the top to show the error message
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        });
+    </script>
+</body>
+</html>
