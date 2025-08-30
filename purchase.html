@@ -16,31 +16,33 @@
             box-sizing: border-box;
         }
         body {
-            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            color: #fff;
-            line-height: 1.6;
-            overflow-x: hidden;
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            margin: 0;
-            overflow: hidden;
-        }
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #fff;
+    line-height: 1.6;
+    overflow-x: hidden;   /* prevent horizontal scroll */
+    overflow-y: auto;     /* enable vertical scroll */
+    position: relative;   /* normal positioning for scrolling */
+    margin: 0;
+}
 
         #container {
-            position: absolute;
-            width: 100vmax;
-            height: 100vmax;
-            left: 50%;
-            top: 50%;
-            background: linear-gradient(to bottom, #0a0a2a, #0a0a16);
-            transform: translate3d(-50%, -40%, 0);
-            z-index: -1;
-        }
+    position: fixed;      /* stays fixed in the background */
+    width: 100%;          /* full viewport width */
+    height: 100%;         /* full viewport height */
+    left: 0;
+    top: 0;
+    transform: none;      /* no centering transform needed */
+    z-index: -1;          /* behind all content */
+}
+
+#container canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* allows clicks and scroll to pass through */
+}
 
         canvas {
             display: block;
