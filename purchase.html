@@ -146,11 +146,11 @@
             perspective: 1200px;
         }
         .product-card {
-            width: 300px;
-            height: 420px;
+            width: 320px;
+            height: 480px;
             background: linear-gradient(135deg, #0c1445 0%, #1a1a2e 100%);
             border-radius: 20px;
-            padding: 30px 20px;
+            padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -168,20 +168,22 @@
         .product-card:nth-child(2) { animation-delay: 0.6s; }
         .product-card:nth-child(3) { animation-delay: 1s; }
         .product-card:hover {
-            transform: rotateY(15deg) translateZ(60px) scale(1.1);
+            transform: rotateY(15deg) translateZ(60px) scale(1.05);
             color: #fff;
             box-shadow: 0 0 20px #0080ff, 0 0 40px #0066ff, 0 0 80px #0044ff;
         }
-        .product-icon {
-            font-size: 60px;
-            margin-bottom: 20px;
-            color: #00bfff;
-            transition: color 0.4s ease;
-            text-shadow: 0 0 15px rgba(0, 191, 255, 0.5);
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
         }
-        .product-card:hover .product-icon {
-            color: #ffffff;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+        .product-content {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
         }
         .product-name {
             font-size: 1.8rem;
@@ -198,6 +200,16 @@
             color: #a0c8ff;
             margin-bottom: 20px;
             flex-grow: 1;
+        }
+        .features-list {
+            text-align: left;
+            margin-bottom: 20px;
+            padding-left: 20px;
+        }
+        .features-list li {
+            color: #a0c8ff;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
         }
         .product-price {
             font-size: 2rem;
@@ -218,6 +230,7 @@
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(0, 102, 255, 0.4);
+            margin-top: auto;
         }
         .product-button:hover {
             transform: translateY(-3px);
@@ -288,7 +301,7 @@
                 gap: 30px;
             }
             .product-card {
-                width: 280px;
+                width: 300px;
             }
             .products-section {
                 padding: 120px 5% 80px;
@@ -311,30 +324,40 @@
 
     <!-- Products Section -->
     <section class="products-section" id="products">
-        <h2 class="section-title">Our Premium Products</h2>
+        <h2 class="section-title">Premium Game Cheats</h2>
         <div class="products-container">
+            <!-- Combat Master Product Card -->
             <div class="product-card">
-                <i class="fas fa-laptop-code product-icon"></i>
-                <h3 class="product-name">Web Suite</h3>
-                <p class="product-description">Complete web development package with modern frameworks, UI libraries, and premium templates.</p>
-                <div class="product-price">$149<span class="price-period">/year</span></div>
-                <button class="product-button">Add to Cart</button>
+                <img src="https://imagedelivery.net/HL_Fwm__tlvUGLZF2p74xw/e2acb142-ab08-4b92-e63a-6e1e1d457800/public" alt="Combat Master" class="product-image">
+                <div class="product-content">
+                    <h3 class="product-name">Combat Master</h3>
+                    
+                    <div class="product-price">$29.99<span class="price-period">/month</span></div>
+                    <button class="product-button">Purchase Now</button>
+                </div>
             </div>
             
+            <!-- Rainbow Six Siege Product Card -->
             <div class="product-card">
-                <i class="fas fa-mobile-alt product-icon"></i>
-                <h3 class="product-name">Mobile Pro</h3>
-                <p class="product-description">Advanced mobile development tools with native and cross-platform support and premium components.</p>
-                <div class="product-price">$199<span class="price-period">/year</span></div>
-                <button class="product-button">Add to Cart</button>
+                <img src="https://imagedelivery.net/HL_Fwm__tlvUGLZF2p74xw/0f5adb6e-7d51-4094-1636-f4491818b500/public" alt="Rainbow Six Siege" class="product-image">
+                <div class="product-content">
+                    <h3 class="product-name">Rainbow Six Siege</h3>
+                    
+                    <div class="product-price">$39.99<span class="price-period">/month</span></div>
+                    <button class="product-button">Purchase Now</button>
+                </div>
             </div>
             
+            <!-- Call of Duty Product Card -->
             <div class="product-card">
-                <i class="fas fa-cloud product-icon"></i>
-                <h3 class="product-name">Cloud Package</h3>
-                <p class="product-description">Enterprise cloud solutions with scalable architecture, security features, and management tools.</p>
-                <div class="product-price">$249<span class="price-period">/year</span></div>
-                <button class="product-button">Add to Cart</button>
+                <img src="https://imagedelivery.net/HL_Fwm__tlvUGLZF2p74xw/bfcc94e3-a917-4f27-e0b6-0b6ec6271200/public" alt="Call of Duty" class="product-image">
+                <div class="product-content">
+                    <h3 class="product-name">Call of Duty</h3>
+                    
+                    </ul>
+                    <div class="product-price">$49.99<span class="price-period">/month</span></div>
+                    <button class="product-button">Purchase Now</button>
+                </div>
             </div>
         </div>
     </section>
@@ -408,7 +431,7 @@
                     const r = 200 * Math.sin(p * Math.PI);
 
                     nav.style.setProperty('--translate-x', `${x}px`);
-                    nav.style.setProperty('--translate-y`, `${y}px`);
+                    nav.style.setProperty('--translate-y', `${y}px`);
                     nav.style.setProperty('--rotate-x', `${r}deg`);
 
                     if (p >= 1) {
