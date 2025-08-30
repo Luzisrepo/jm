@@ -6,6 +6,7 @@
     <title>JM Solutions | Products</title>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,900&family=Climate+Crisis&family=Lexend:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
@@ -18,13 +19,31 @@
             font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            background: #0a0a16;
             color: #fff;
             line-height: 1.6;
             overflow-x: hidden;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: 0;
+            overflow: hidden;
         }
-        html, body {
-            scroll-behavior: smooth;
+
+        #container {
+            position: absolute;
+            width: 100vmax;
+            height: 100vmax;
+            left: 50%;
+            top: 50%;
+            background: linear-gradient(to bottom, #0a0a2a, #0a0a16);
+            transform: translate3d(-50%, -40%, 0);
+            z-index: -1;
+        }
+
+        canvas {
+            display: block;
         }
         
         /* Navigation Styles */
@@ -126,9 +145,10 @@
         /* Products Section - Dark Blue Theme */
         .products-section {
             padding: 150px 5% 100px;
-            background: linear-gradient(135deg, #0a0a2a 0%, #0a0a16 100%);
             text-align: center;
             min-height: 100vh;
+            position: relative;
+            z-index: 1;
         }
         .section-title {
             font-size: 3rem;
@@ -148,7 +168,7 @@
         .product-card {
             width: 320px;
             height: 480px;
-            background: linear-gradient(135deg, #0c1445 0%, #1a1a2e 100%);
+            background: linear-gradient(135deg, rgba(12, 20, 69, 0.8) 0%, rgba(26, 26, 46, 0.8) 100%);
             border-radius: 20px;
             padding: 0;
             display: flex;
@@ -163,6 +183,7 @@
             position: relative;
             overflow: hidden;
             border: 1px solid rgba(0, 120, 255, 0.2);
+            backdrop-filter: blur(10px);
         }
         .product-card:nth-child(1) { animation-delay: 0.2s; }
         .product-card:nth-child(2) { animation-delay: 0.6s; }
@@ -246,9 +267,12 @@
         
         /* Footer */
         footer {
-            background: #0c0b1a;
+            background: rgba(12, 11, 26, 0.8);
             padding: 50px 5%;
             text-align: center;
+            position: relative;
+            z-index: 1;
+            backdrop-filter: blur(10px);
         }
         .footer-content {
             max-width: 1200px;
@@ -310,6 +334,9 @@
     </style>
 </head>
 <body>
+    <!-- Animated Background Container -->
+    <div id="container"></div>
+
     <!-- Navigation -->
     <header>
         <nav>
@@ -343,6 +370,7 @@
                 <div class="product-content">
                     <h3 class="product-name">Rainbow Six Siege</h3>
                     
+                    
                     <div class="product-price">$39.99<span class="price-period">/month</span></div>
                     <button class="product-button">Purchase Now</button>
                 </div>
@@ -354,7 +382,7 @@
                 <div class="product-content">
                     <h3 class="product-name">Call of Duty</h3>
                     
-                    </ul>
+                    
                     <div class="product-price">$49.99<span class="price-period">/month</span></div>
                     <button class="product-button">Purchase Now</button>
                 </div>
@@ -411,6 +439,121 @@
     </svg>
 
     <script>
+        // Three.js Background Animation
+        let scene, camera, renderer, ribbon;
+
+        const init = () => {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
+            camera.position.z = 2;
+
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            const container = document.querySelector('#container');
+            container.appendChild(renderer.domElement);
+
+            ribbon = new THREE.Mesh(
+                new THREE.PlaneGeometry(1, 1, 128, 128),
+                new THREE.ShaderMaterial({
+                    uniforms: {
+                        time: { value: 1.0 },
+                    },
+                    vertexShader: `
+                        varying vec3 vEC;
+                        uniform float time;
+
+                        float iqhash(float n) {
+                            return fract(sin(n) * 43758.5453);
+                        }
+
+                        float noise(vec3 x) {
+                            vec3 p = floor(x);
+                            vec3 f = fract(x);
+                            f = f * f * (3.0 - 2.0 * f);
+                            float n = p.x + p.y * 57.0 + 113.0 * p.z;
+                            return mix(mix(mix(iqhash(n), iqhash(n + 1.0), f.x),
+                                        mix(iqhash(n + 57.0), iqhash(n + 58.0), f.x), f.y),
+                                        mix(mix(iqhash(n + 113.0), iqhash(n + 114.0), f.x),
+                                        mix(iqhash(n + 170.0), iqhash(n + 171.0), f.x), f.y), f.z);
+                        }
+
+                        float xmb_noise2(vec3 x) {
+                            return cos(x.z * 4.0) * cos(x.z + time / 10.0 + x.x);
+                        }
+
+                        void main() {
+                            vec4 pos = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                            vec3 v = vec3(pos.x, 0.0, pos.y);
+                            vec3 v2 = v;
+                            vec3 v3 = v;
+
+                            v.y = xmb_noise2(v2) / 8.0;
+
+                            v3.x -= time / 5.0;
+                            v3.x /= 4.0;
+
+                            v3.z -= time / 10.0;
+                            v3.y -= time / 100.0;
+
+                            v.z -= noise(v3 * 7.0) / 15.0;
+                            v.y -= noise(v3 * 7.0) / 15.0 + cos(v.x * 2.0 - time / 2.0) / 5.0 - 0.3;
+
+                            vEC = v;
+                            gl_Position = vec4(v, 1.0);
+                        }
+                    `,
+                    fragmentShader: `
+                        uniform float time;
+                        varying vec3 vEC;
+
+                        void main() {
+                            const vec3 up = vec3(0.0, 0.0, 1.0);
+                            vec3 x = dFdx(vEC);
+                            vec3 y = dFdy(vEC);
+                            vec3 normal = normalize(cross(x, y));
+                            float c = 1.0 - dot(normal, up);
+                            c = (1.0 - cos(c * c)) / 3.0;
+                            gl_FragColor = vec4(0.2, 0.4, 0.8, c * 1.5);
+                        }
+                    `,
+                    extensions: {
+                        derivatives: true,
+                        fragDepth: false,
+                        drawBuffers: false,
+                        shaderTextureLOD: false
+                    },
+                    side: THREE.DoubleSide,
+                    transparent: true,
+                    depthTest: false,
+                })
+            );
+
+            scene.add(ribbon);
+            resize();
+            window.addEventListener('resize', resize);
+        };
+
+        const resize = () => {
+            const container = document.querySelector('#container');
+            const { offsetWidth, offsetHeight } = container;
+
+            renderer.setSize(offsetWidth, offsetHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+
+            camera.aspect = offsetWidth / offsetHeight;
+            camera.updateProjectionMatrix();
+
+            ribbon.scale.set(camera.aspect * 1.55, 0.75, 1);
+        };
+
+        const animate = () => {
+            ribbon.material.uniforms.time.value += 0.01;
+            renderer.render(scene, camera);
+            requestAnimationFrame(animate);
+        };
+
+        init();
+        animate();
+
         // Navigation JS
         document.addEventListener('DOMContentLoaded', () => {
             const nav = document.querySelector('nav > ul');
@@ -418,7 +561,7 @@
             let anim = null;
             let currentActiveItem = null;
 
-            const animate = (from, to) => {
+            const animateNav = (from, to) => {
                 if (anim) clearInterval(anim);
 
                 const start = Date.now();
@@ -452,7 +595,7 @@
             const moveToItem = (item) => {
                 const current = getCurrentPosition();
                 const center = getItemCenter(item);
-                animate(current, center);
+                animateNav(current, center);
                 nav.classList.add('show-indicator');
             };
 
